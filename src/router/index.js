@@ -1,27 +1,63 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Router from 'vue-router'
+import Index from '../views/index'
+import Sort from '../views/sort'
+import BookList from '../views/bookList'
+import Details from '../views/details'
+import User from '../views/login/index.vue'
+import Login from '../views/login/login.vue'
+import Register from '../views/login/register.vue'
+Vue.use(Router)
 
-Vue.use(VueRouter)
+export default new Router({
+    mode:'history',
+    routes: [
+        {
+            path: '/',
+            component: Index,
+        },
+        {
+            path: '/tag',
+            name:'sort',
+            component: Sort,
+            children: [
+                {
+                    path:'/tag/:name',
+                    component: BookList
+                },
+                // {
+                //     path: '/:name/:sort',
+                //     name:'sort',
+                //     component: BookList,
+                //     // meta: { keepAlive: true },
+                // }
+            ]
+        },
+        {
+            path: '/details/:id',
+            name:'details',
+            component:Details
+        },
+        //登录注册页面路由
+        {
+            path: '/user',
+            component: User,
+            name: 'user',
+            redirect: '/user/login',
+            children: [
+                {
+                    path: 'login',
+                    name: 'login',
+                    component: Login
+                },
+                {
+                    path: 'register',
+                    name: 'register',
+                    component: Register
+                }
+            ]
+        }
+       
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
-
-const router = new VueRouter({
-  routes
+    ]
 })
-
-export default router
